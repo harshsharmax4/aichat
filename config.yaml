@@ -1,33 +1,33 @@
 # ---- llm ----
-model: openai:gpt-4o             # Specify the LLM to use
-temperature: null                # Set default temperature parameter (0, 1)
+model: gemini:gemini-2.5-pro             # Specify the LLM to use
+temperature: 1                # Set default temperature parameter (0, 1)
 top_p: null                      # Set default top-p parameter, with a range of (0, 1) or (0, 2) depending on the model
 
 # ---- behavior ----
 stream: true                     # Controls whether to use the stream-style API.
 save: true                       # Indicates whether to persist the message
 keybindings: emacs               # Choose keybinding style (emacs, vi)
-editor: null                     # Specifies the command used to edit input buffer or session. (e.g. vim, emacs, nano).
-wrap: no                         # Controls text wrapping (no, auto, <max-width>)
-wrap_code: false                 # Enables or disables wrapping of code blocks
+editor: mate                     # Specifies the command used to edit input buffer or session. (e.g. vim, emacs, nano).
+wrap: yes                         # Controls text wrapping (no, auto, <max-width>)
+wrap_code: true                 # Enables or disables wrapping of code blocks
 
 # ---- function-calling ----
 # Visit https://github.com/sigoden/llm-functions for setup instructions
 function_calling: true           # Enables or disables function calling (Globally).
 mapping_tools:                   # Alias for a tool or toolset
   fs: 'fs_cat,fs_ls,fs_mkdir,fs_rm,fs_write'
-use_tools: null                  # Which tools to use by default. (e.g. 'fs,web_search')
+use_tools: fs, web_search, execute_command                  # Which tools to use by default. (e.g. 'fs,web_search')
 
 # ---- prelude ----
 repl_prelude: null               # Set a default role or session for REPL mode (e.g. role:<name>, session:<name>, <session>:<role>)
 cmd_prelude: null                # Set a default role or session for CMD mode (e.g. role:<name>, session:<name>, <session>:<role>)
-agent_prelude: null              # Set a session to use when starting a agent (e.g. temp, default)
+agent_prelude: RP              # Set a session to use when starting a agent (e.g. temp, default)
 
 # ---- session ----
 # Controls the persistence of the session. if true, auto save; if false, not save; if null, asking the user
-save_session: null
+save_session: true
 # Compress session when token count reaches or exceeds this threshold
-compress_threshold: 4000
+compress_threshold: 20000
 # Text prompt used for creating a concise summary of session message
 summarize_prompt: 'Summarize the discussion briefly in 200 words or less to use as a prompt for future context.'
 # Text prompt used for including the summary of the entire session
@@ -38,8 +38,8 @@ summary_prompt: 'This is a summary of the chat history as a recap: '
 rag_embedding_model: null        # Specifies the embedding model used for context retrieval
 rag_reranker_model: null         # Specifies the reranker model used for sorting retrieved documents
 rag_top_k: 5                     # Specifies the number of documents to retrieve for answering queries
-rag_chunk_size: null             # Defines the size of chunks for document processing in characters
-rag_chunk_overlap: null          # Defines the overlap between chunks
+rag_chunk_size: 2048             # Defines the size of chunks for document processing in characters
+rag_chunk_overlap: 102          # Defines the overlap between chunks
 # Defines the query structure using variables like __CONTEXT__ and __INPUT__ to tailor searches to specific needs
 rag_template: |
   Answer the query based on the context while respecting the rules. (user query, some textual context and rules, all inside xml tags)
@@ -71,7 +71,7 @@ document_loaders:
 
 # ---- apperence ----
 highlight: true                  # Controls syntax highlighting
-light_theme: false               # Activates a light color theme when true. env: AICHAT_LIGHT_THEME
+light_theme: true               # Activates a light color theme when true. env: AICHAT_LIGHT_THEME
 # Custom REPL left/right prompts, see https://github.com/sigoden/aichat/wiki/Custom-REPL-Prompt for more details
 left_prompt:
   '{color.green}{?session {?agent {agent}>}{session}{?role /}}{!session {?agent {agent}>}}{role}{?rag @{rag}}{color.cyan}{?session )}{!session >}{color.reset} '
@@ -80,7 +80,7 @@ right_prompt:
 
 # ---- misc ----
 serve_addr: 127.0.0.1:8000                  # Server listening address 
-user_agent: null                            # Set User-Agent HTTP header, use `auto` for aichat/<current-version>
+user_agent: chrome                            # Set User-Agent HTTP header, use `auto` for aichat/<current-version>
 save_shell_history: true                    # Whether to save shell execution command to the history file
 # URL to sync model changes from, e.g., https://cdn.jsdelivr.net/gh/sigoden/aichat@main/models.yaml
 sync_models_url: https://raw.githubusercontent.com/sigoden/aichat/refs/heads/main/models.yaml
@@ -220,13 +220,13 @@ clients:
           body:
             safetySettings:
               - category: HARM_CATEGORY_HARASSMENT
-                threshold: BLOCK_ONLY_HIGH
+                threshold: BLOCK_NONE
               - category: HARM_CATEGORY_HATE_SPEECH
-                threshold: BLOCK_ONLY_HIGH
+                threshold: BLOCK_NONE
               - category: HARM_CATEGORY_SEXUALLY_EXPLICIT
-                threshold: BLOCK_ONLY_HIGH
+                threshold: BLOCK_NONE
               - category: HARM_CATEGORY_DANGEROUS_CONTENT
-                threshold: BLOCK_ONLY_HIGH
+                threshold: BLOCK_NONE
 
   # See https://docs.aws.amazon.com/bedrock/latest/userguide/
   - type: bedrock

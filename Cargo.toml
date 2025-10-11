@@ -72,11 +72,11 @@ duct = "1.0.0"
 [dependencies.reqwest]
 version = "0.12.0"
 features = ["json", "multipart", "socks", "rustls-tls", "rustls-tls-native-roots"]
-default-features = false
+default-features = true
 
 [dependencies.syntect]
 version = "5.0.0"
-default-features = false
+default-features = true
 features = ["parsing", "regex-onig", "plist-load"]
 
 [target.'cfg(target_os = "macos")'.dependencies]
